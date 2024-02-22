@@ -1,0 +1,123 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} Post's {{ username }} {% endblock %}
+
+{% block content %}
+<style>
+    .big_container{
+        display:grid;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+    .card_border{
+        align-items: center;
+        text-align: center;
+        border-style: solid;
+        border-radius: 10px;
+        margin-bottom: 5px;
+    }
+    <!--posts-->
+    .username_post{
+        color: black;
+        box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
+        font-size:x-large;
+        background-color: rgb(50, 50, 50);
+    }
+    .text_post{
+        font-family: 'Courier New', Courier, monospace;
+        font-size: larger;
+        font-weight: bold;
+        color: black;
+    }
+    button{
+        border-radius: 5px;
+        background-color: antiquewhite;
+        color: black;
+        box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
+    }
+    button:hover{
+        background-color: black;
+        color: antiquewhite;
+    }
+    <!--comment-->
+    .for-text-cr-comment {
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 90px;
+        background-color: aliceblue;
+        position: relative;
+    }
+    .form-control {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        font-family: 'Pacifico', cursive;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+        position: relative;
+        border-style: 4px solid;
+        margin-bottom: 5px;
+    }
+    <!--delete_comments-->
+    .del_comments{
+        display:inline-flex;
+    }
+</style>
+<p>Welcome back, {{ username }}</p>
+
+<div class="big_container">
+    {% for post in posts %}
+        <div class="card_border">
+            <h4 class="username_post">{{ post.name }}</h4>
+            <!--Delete User-->
+            <form class="for-text-cr-comment" action="{{ url_for('delete_user', name = post.name) }} ">
+                <div class="submit-btn-cr-post">
+                    <button type="submit" class="btn-primary-cr-post">Delete This User</button>
+                </div>
+            </form>
+            <br>
+            <p class="text_post">{{ post.text }} </p>
+            <div class="del_comments">
+                {% for comment in comments %}
+                    {% if comment.post_id == post.id %}
+                        <p class="text_comments">{{ comment.author }}
+                            {% if comment.author == 1 %}
+                                : Comment BY Admin {{username}} 
+                            {% endif %}:<br> {{ comment.text }}</p>
+                        <form class="for-text-cr-post" action="{{ url_for('delete_comment', id = comment.id) }} ">
+                            <div class="submit-btn-cr-post">
+                                <button type="submit" class="btn-primary-cr-post">Delete Comment</button>
+                            </div>
+                        </form>
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <!--Delete Post-->
+            <form class="for-text-cr-post" action="{{ url_for('delete_post', id = post.id) }} ">
+                <div class="submit-btn-cr-post">
+                    <button type="submit" class="btn-primary-cr-post">Delete Post</button>
+                </div>
+            </form>
+            <br>
+            <!--Create Comment
+            <form class="for-text-cr-comment" method="POST" action="{{ url_for('create_comment', id = post.id) }} ">
+                <textarea name="text_cr_comment" id="text_cr_comment" class="form-control"></textarea>
+                <div class="submit-btn-cr-post">
+                    <button type="submit" class="btn-primary-cr-post">Comment By Admin {{username}}</button>
+                </div>
+            </form>
+            <br>
+            -->
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
